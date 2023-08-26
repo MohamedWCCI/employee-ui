@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import { Employee } from './EmployeeType';
+import axios from 'axios';
 
 function App() {
+
+  const baseUrl = 'http://localhost:8080/api/employee';
+  const [data, setData] = useState<{Employee: []}>({Employee: []});
+
+  const fetchEmployees = async () => {
+
+    await axios.get(baseUrl + "/all")
+      .then(response => {
+        setData(response.data);
+        console.log(data);
+      }).catch(error => {
+
+      });
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button onClick={() => fetchEmployees()}>Fetch Employees</button>
+
+      <div>{data.Employee}</div>
     </div>
   );
 }
